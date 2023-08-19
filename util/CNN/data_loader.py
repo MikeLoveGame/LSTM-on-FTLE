@@ -44,8 +44,7 @@ class MyDataset(Dataset):
         return len(self.labels)
 
 class LSTM_DataSet2D(Dataset):
-    def __init__(self, U_path, V_path, labels_path):
-        self.device = "cuda"
+    def __init__(self, U_path, V_path, labels_path, device):
         # Load data from numpy files
         data_U = __readData2D__(U_path)
         data_V = __readData2D__(V_path)
@@ -64,12 +63,13 @@ class LSTM_DataSet2D(Dataset):
 
         self.data = torch.from_numpy(self.data).float()
         self.labels = torch.from_numpy(self.labels).float()
+        if (device != "cpu"):
+            self.data.cuda()
+            self.labels.cuda()
 
-        self.data.cuda()
-        self.labels.cuda()
 class LSTM_DataSet(Dataset):
-    def __init__(self, U_path, V_path, labels_path):
-        self.device = "cuda"
+    def __init__(self, U_path, V_path, labels_path, device = "cuda"):
+        self.device = device
         # Load data from numpy files
         data_U = __readData2D__(U_path)
         data_V = __readData2D__(V_path)
@@ -92,9 +92,9 @@ class LSTM_DataSet(Dataset):
         self.data = torch.from_numpy(self.data).float()
         self.labels = torch.from_numpy(self.labels).float()
 
-
-        self.data.cuda()
-        self.labels.cuda()
+        if (device != "cpu"):
+            self.data.cuda()
+            self.labels.cuda()
 
     def __getitem__(self, index):
         # Get one item from the dataset
@@ -165,6 +165,14 @@ def dataLoaderLSTM(batch_size : int, U_folder = r"D:\FTLE\FTLE-generated-data\ve
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return dataloader
 
+def test_loaderLSTM(batch_size : int, U_folder, V_folder, labels_path, device = "cpu"):
+
+    # Create the Dataset
+    dataset = LSTM_DataSet(U_path=U_folder, V_path=V_folder, labels_path=labels_path, device=device)
+
+    # Create the DataLoader
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    return dataloader
 def dataLoaderCNN():
     # Set the paths to the numpy files
     U_folder = r"C:\AI\CNIC\SAM\segment-anything\util\LCS\data\U-vector-numpy-1D"

@@ -2,15 +2,15 @@ import torch
 from torch import nn
 from data_loader import dataLoaderLSTM
 import numpy as np
-
+from SSIM import SSIMLoss
 
 class ConvLSTMCell(nn.Module):
-    def __init__(self, input_dim, hidden_dim, kernel_size, bias):
+    def __init__(self, input_dim, hidden_dim, kernel_size, bias, device):
         super(ConvLSTMCell, self).__init__()
 
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
-        self.device = "cuda"
+        self.device = device
         self.kernel_size = kernel_size
         self.padding = kernel_size[0] // 2, kernel_size[1] // 2
         self.bias = bias
@@ -46,9 +46,9 @@ class ConvLSTMCell(nn.Module):
 
 
 class ConvLSTM(nn.Module):
-    def __init__(self, input_dim, hidden_dim, kernel_size, bias):
+    def __init__(self, input_dim, hidden_dim, kernel_size, bias, device):
         super(ConvLSTM, self).__init__()
-        self.cell = ConvLSTMCell(input_dim, hidden_dim, kernel_size, bias)
+        self.cell = ConvLSTMCell(input_dim, hidden_dim, kernel_size, bias, device)
 
     def forward(self, input_tensor, hidden_state=None):
         if hidden_state is None:
@@ -62,17 +62,17 @@ class ConvLSTM(nn.Module):
 
 
 class ConvNet(nn.Module):
-    def __init__(self, num_output : int = 1):
+    def __init__(self, num_output : int = 1, device = "cpu"):
         super(ConvNet, self).__init__()
-        self.conv_lstm = ConvLSTM(input_dim=2, hidden_dim=64, kernel_size=(3, 3), bias=True)
-        self.device = "cuda"
+        self.conv_lstm = ConvLSTM(input_dim=2, hidden_dim=64, kernel_size=(3, 3), bias=True, device=device)
+        self.device = device
 
         self.fc_layers = nn.Sequential(
-            nn.Conv2d(64, 64, kernel_size=1),
+            nn.Conv2d(64, 128, kernel_size=1),
             nn.ReLU(),
-            nn.Conv2d(64, 64, kernel_size=1),
+            nn.Conv2d(128, 256, kernel_size=1),
             nn.ReLU(),
-            nn.Conv2d(64, 64, kernel_size=1),
+            nn.Conv2d(256, 64, kernel_size=1),
             nn.ReLU(),
             nn.Conv2d(64, 1, kernel_size=1),
         )
@@ -85,25 +85,28 @@ class ConvNet(nn.Module):
 
         h_next, c_next = self.conv_lstm(x)
         outputs = self.fc_layers(c_next)
+        outputs = outputs[0]
         for i in range(1, self.num_output):
             h_next, c_next = self.conv_lstm(x, (h_next, c_next))
 
-            outputs = torch.cat((outputs, self.fc_layers(c_next)))
+            outputs = torch.cat((outputs, self.fc_layers(c_next)[0]))
 
-        outputs = outputs.resize(1, 9, 500, 500)
+        outputs = outputs.view(1, 9, 500, 500)
 
         return outputs
 
 def save_model(model : nn.Module, modelpath = r"D:\FTLE\FTLE-generated-data\best-models\model1.pt" ):
-
     torch.save(model.state_dict(), modelpath)
-def __main__():
+
+
+def train():
     device = "cuda"
-    model = ConvNet(num_output=9)
+    model = ConvNet(num_output=9, device="cuda")
     model.to(device=device)
     learning_rate = 1e-5
     # Set the loss function and the optimizer
-    loss_function = nn.MSELoss()
+    loss_function = SSIMLoss()
+    loss_function.to(device=device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     # Number of epochs (iterations over the whole dataset)

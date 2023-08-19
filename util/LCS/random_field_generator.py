@@ -3,6 +3,17 @@ import numpy as np
 
 
 
+def divergent_circle(location : (int, int), radius : int, vector : np.ndarray):
+    dim = vector.shape
+    if (len(dim) != 2):
+        raise Exception("vector must be 2D")
+    if (location[0] - radius < 0 or location[0] + radius > dim[0] or location[1] - radius < 0 or location[1] + radius > dim[1]):
+        raise Exception("circle is out of bound")
+    for i in range(radius):
+        for j in range(radius):
+
+
+
 
 def generate_vector():
     # Generate a random vector of size 1000
