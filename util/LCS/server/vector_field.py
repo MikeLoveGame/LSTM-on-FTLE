@@ -266,9 +266,9 @@ def showFTLE(ftle : np.ndarray):
     plt.show()
 
 
-dirPath = r"/home/shike/AI/SAM/LCS/data/U-vector-numpy-1D"
+dirPath = r"/home/shike/AI/SAM/LCS/data/U"
 dataU = readData2D(dirPath)
-dirPath = r"/home/shike/AI/SAM/LCS/data/V-vector-numpy-1D"
+dirPath = r"/home/shike/AI/SAM/LCS/data/V"
 dataV = readData2D(dirPath)
 
 field = Field(mapU=dataU, mapV=dataV, time=60, num_partical=250000, interpolate_factor=10)

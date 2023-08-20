@@ -27,7 +27,7 @@ def to_1D_raw():
 
 def to_1D_numpy():
     dir_destination = r"C:\AI\Data\Field-data\UV-vector-numpy"
-    save_destination = r"C:\AI\Data\Field-data\UV-vector-numpy-1D"
+    save_destination = r"C:\AI\Data\Field-data\UV"
     files = os.listdir(dir_destination)
 
     for file in files:
