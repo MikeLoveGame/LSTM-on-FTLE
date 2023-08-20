@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.interpolate import CubicSpline
 from scipy import interpolate
 import os
 import torch.nn.functional as f
