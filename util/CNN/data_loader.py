@@ -73,7 +73,7 @@ class LSTM_DataSet(Dataset):
         # Load data from numpy files
         data_U = __readData2D__(U_path)
         data_V = __readData2D__(V_path)
-        self.normalizationVector(data_U, data_V)
+        #self.normalizationVector(data_U, data_V)
 
         data = []
         time = data_U.shape[0]
@@ -188,14 +188,11 @@ def dataLoaderCNN():
 
     return dataloader
 def test():
-    U_folder = r"D:\FTLE\FTLE-generated-data\vector-U"
-    V_folder = r"D:\FTLE\FTLE-generated-data\vector-V"
+    U_folder = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Training-Set-2\U"
+    V_folder = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Training-Set-2\V"
 
-    labels_path = r"D:\FTLE\FTLE-generated-data\targets"
+    labels_path = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Training-Set-2\Targets"
 
     # Create the Dataset
-    dataset = LSTM_DataSet(U_path=U_folder, V_path=V_folder, labels_path=labels_path)
-
-    # Create the DataLoader
-    dataloader = DataLoader(dataset, batch_size=2, shuffle=True)
+    dataset = dataLoaderLSTM(batch_size=1, U_folder=U_folder, V_folder=V_folder, labels_path=labels_path)
 

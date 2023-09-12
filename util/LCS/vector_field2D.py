@@ -226,20 +226,33 @@ class Field():
 
         x_axis = self.mapU.shape[0]
         y_axis = self.mapU.shape[1]
-        if (u0 >= x_axis):
-            u0 = x_axis - 1
-        if (v0 >= y_axis):
-            v0 = y_axis - 1
+        if (abs(u0) >= x_axis):
+            if (u0 >= 0):
+                u0 = x_axis - 1
+            else:
+                u0 = 0
+        if (abs(v0) >= y_axis):
+            if (v0 >= 0):
+                v0 = y_axis - 1
+            else:
+                v0 = 0
+
 
         f1 = self.mapU[int(u0)][int(v0)]
 
         u2 = u0 + dt * f1 / 2.0
         v2 = v0 + dt * f1 / 2.0
 
-        if (u2 >= self.mapU.shape[0]):
-            u2 = x_axis - 1
-        if (v2 >= self.mapU.shape[1]):
-            v2 = y_axis - 1
+        if (abs(u2) >= self.mapU.shape[0]):
+            if (u2 >= 0):
+                u2 = x_axis - 1
+            else:
+                u2 = 0
+        if (abs(v2) >= self.mapU.shape[1]):
+            if (v2 >= 0):
+                v2 = y_axis - 1
+            else:
+                v2 = 0
 
         f2 = self.mapU[int(u2)][int(v2)]
 
@@ -247,10 +260,16 @@ class Field():
         u3 = u0 + dt / 2.0
         v3 = v0 + dt * f2 / 2.0
 
-        if (u3 >= self.mapU.shape[0]):
-            u3 = x_axis - 1
-        if (v3 >= self.mapU.shape[1]):
-            v3 = y_axis - 1
+        if (abs(u3) >= self.mapU.shape[0]):
+            if(u3 >= 0):
+                u3 = x_axis - 1
+            else:
+                u3 = 0
+        if (abs(v3) >= self.mapU.shape[1]):
+            if(v3 >= 0):
+                v3 = y_axis - 1
+            else:
+                v3 = 0
 
         f3 = self.mapU[int(u3)] [int(v3)]
 
@@ -258,10 +277,16 @@ class Field():
         u4 = u0 + dt * f3
         v4 = v0 + dt
 
-        if (u4 >= self.mapU.shape[0]):
-            u4 = x_axis - 1
-        if (v4 >= self.mapU.shape[1]):
-            v4 = y_axis - 1
+        if (abs(u4) >= self.mapU.shape[0]):
+            if(u4 >= 0):
+                u4 = x_axis - 1
+            else:
+                u4 = 0
+        if (abs(v4) >= self.mapU.shape[1]):
+            if(v4 >= 0):
+                v4 = y_axis - 1
+            else:
+                v4 = 0
 
         f4 = self.mapU[int(u4)] [int(v4)]
 
@@ -274,39 +299,66 @@ class Field():
         x_axis = self.mapU.shape[0]
         y_axis = self.mapU.shape[1]
 
-        if (u0 >= x_axis):
-            u0 = x_axis - 1
-        if (v0 >= y_axis):
-            v0 = y_axis - 1
+        if (abs(u0) >= x_axis):
+            if (u0 >= 0):
+                u0 = x_axis - 1
+            else:
+                u0 = 0
+        if (abs(v0) >= y_axis):
+            if (v0 >= 0):
+                v0 = y_axis - 1
+            else:
+                v0 = 0
 
         f1 = self.mapV[int(u0)][int(v0)]
 
         u2 = u0 + dt * f1 / 2.0
         v2 = v0 + dt * f1 / 2.0
 
-        if (u2 >= self.mapV.shape[0]):
-            u2 = x_axis - 1
-        if (v2 >= self.mapV.shape[1]):
-            v2 = y_axis - 1
+        if (abs(u2) >= self.mapV.shape[0]):
+            if (u2 >= 0):
+                u2 = x_axis - 1
+            else:
+                u2 = 0
+        if (abs(v2) >= self.mapV.shape[1]):
+            if (v2 >= 0):
+                v2 = y_axis - 1
+            else:
+                v2 = 0
+
 
         f2 = self.mapV[int(u2)][int(v2)]
 
         u3 = u0 + dt / 2.0
         v3 = v0 + dt * f2 / 2.0
 
-        if (u3 >= self.mapV.shape[0]):
-            u3 = x_axis - 1
-        if (v3 >= self.mapV.shape[1]):
-            v3 = y_axis - 1
+        if (abs(u3) >= self.mapV.shape[0]):
+            if(u3 >= 0):
+                u3 = x_axis - 1
+            else:
+                u3 = 0
+
+        if (abs(v3) >= self.mapV.shape[1]):
+            if (v3 >= 0):
+                v3 = y_axis - 1
+            else:
+                v3 = 0
+
         f3 = self.mapV[int(u3)] [int(v3)]
 
         u4 = u0 + dt
         v4 = v0 + dt * f3
 
-        if (u4 >= self.mapV.shape[0]):
-            u4 = x_axis - 1
-        if (v4 >= self.mapV.shape[1]):
-            v4 = y_axis - 1
+        if (abs(u4) >= self.mapV.shape[0]):
+            if(u4 >= 0):
+                u4 = x_axis - 1
+            else:
+                u4 = 0
+        if (abs(v4) >= self.mapV.shape[1]):
+            if(v4 >= 0):
+                v4 = y_axis - 1
+            else:
+                v4 = 0
         f4 = self.mapV[int(u4)] [int(v4)]
 
         v1 = v0 + dt * (f1 + 2.0 * f2 + 2.0 * f3 + f4) / 6.0
@@ -317,7 +369,6 @@ class Field():
         ftle = []
         for i in range(1, time):
             ftle.append(self.calc_ftle(delta=1, shape=self.particle_shape, start=0, end=i))
-
         ftle = np.asarray(a=ftle, dtype=np.float32)
         return ftle
 

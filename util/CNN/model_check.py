@@ -11,19 +11,19 @@ def showFTLE(ftle : np.ndarray):
 
 
 
-U_folder = r"C:\AI\CNIC\SAM\segment-anything\util\LCS\data\U-vector-numpy-1D"
-V_folder = r"C:\AI\CNIC\SAM\segment-anything\util\LCS\data\V-vector-numpy-1D"
-labelpath = r"D:\FTLE\test-data\targets"
+U_folder = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Testing-Set-1\U"
+V_folder = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Testing-Set-1\V"
+labelpath = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Testing-Set-1\targets"
 
 save_folder = r"D:\FTLE\FTLE-generated-data\data-to-see"
 model = ConvNet(num_output=9)
 device = "cpu"
-checkpoint = torch.load(r"D:\FTLE\FTLE-generated-data\best-models\model9\model9.pt", map_location=device)
+checkpoint = torch.load(r"D:\FTLE\FTLE-generated-data\best-models\model11\model9.pt", map_location=device)
 
 model.load_state_dict(checkpoint)
 
-resultFile = r"C:\AI\CNIC\SAM\segment-anything\util\CNN\result\model9(9).txt"
-
+resultFile = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Training-Set-1\results"
+result = open(resultFile, "w")
 model.eval()
 model.to(device="cpu")
 
@@ -35,18 +35,22 @@ for i, (inputs, targets) in enumerate(dataset):
     inputs = inputs.to(model.device)
     targets = targets.to(model.device)
 
-    for img in targets[0]:
+    '''for img in targets[0]:
         showFTLE(img.cpu().detach().numpy())
-
+'''
     outputs = model(inputs)
     outputs = outputs/10
     loss = loss_function(outputs, targets)
+    result.write(f"loss on {i}: {loss}\n")
+    torch.save(outputs, save_folder + f"\output{i}.pt")
 
     print(f"loss: {loss}")
-    for img in outputs[0]:
+    '''for img in outputs[0]:
         showFTLE(img.cpu().detach().numpy())
+'''
+
+result.close()
 
 
-    torch.save(outputs, save_folder + f"\output{i}.pt")
 
 

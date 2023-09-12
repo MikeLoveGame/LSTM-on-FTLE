@@ -10,7 +10,7 @@ def showFTLE(ftle : np.ndarray):
         plt.show()
         i=i+10
 
-path = r"D:\FTLE\test-data\targets\ftle.npy"
+path = r"C:\Github-repository\LSTM-on-FTLE\LSTM-on-FTLE\data\Training-Set-2\Targets\ftle.npy"
 
 
 ftle = np.load(path, allow_pickle=True)
