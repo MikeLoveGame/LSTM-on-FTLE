@@ -1,2 +1,1 @@
-The full Version will be updated by August 31th, 2023
-with CLI support
+Sorry, my computer was broken and school started, I will make this support CLI before the end of September
