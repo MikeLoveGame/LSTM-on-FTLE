@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-path = r"D:\FTLE\FTLE-generated-data\data-to-see\output0.pt"
+path = r"C:\Users\doubi\Downloads\results_output7.pt"
 output = torch.load(path)
 output = output.cpu().detach().numpy()
 output = output[0]

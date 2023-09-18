@@ -3,6 +3,8 @@ from torch import nn
 from data_loader import dataLoaderLSTM
 import numpy as np
 from SSIM import SSIMLoss
+import argparse
+
 
 class ConvLSTMCell(nn.Module):
     def __init__(self, input_dim, hidden_dim, kernel_size, bias, device):
@@ -99,19 +101,27 @@ def save_model(model : nn.Module, modelpath = r"D:\FTLE\FTLE-generated-data\best
     torch.save(model.state_dict(), modelpath)
 
 
-def train():
-    device = "cuda"
+def train(U_path = None, V_path = None, target_path = None, num_output = 9,
+          learning_rate = 1e-5, batchsize= 1,  device = "cuda", epochs = 10, modelpath = None):
+    model = None
+
+
     model = ConvNet(num_output=9, device="cuda")
+    if (modelpath != None):
+        model.load_state_dict(torch.load(modelpath))
+        model.eval()
+        print("load model from " + modelpath)
     model.to(device=device)
-    learning_rate = 1e-5
     # Set the loss function and the optimizer
     loss_function = SSIMLoss()
     loss_function.to(device=device)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-
+    MyTrainingSet = None
     # Number of epochs (iterations over the whole dataset)
-    epochs = 10
-    MyTrainingSet = dataLoaderLSTM(1)
+    if (U_path == None):
+        MyTrainingSet = dataLoaderLSTM(batch_size=batchsize)
+    else:
+        MyTrainingSet = dataLoaderLSTM(U_folder=U_path, V_folder=V_path, labels_path=target_path, batchsize=batchsize)
     min_loss = 1e5
 
     for epoch in range(epochs):
@@ -129,10 +139,12 @@ def train():
                 min_loss = loss
                 save_model(model)
             # Backward pass and optimization
-            optimizer.zero_grad()
+            optimizer.zero_grad()# if your have an large memory in your GPU, you can comment this line
+
             loss.backward()
             optimizer.step()
 
             # Print loss every 10 steps
-            print(f"Epoch: {epoch}, Step: {i}, Loss: {loss.item()}")
+            print(f"Epoch: {epoch}, Step: {i}, Loss: {loss.item()}\n")
+
 
