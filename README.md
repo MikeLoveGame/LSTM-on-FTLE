@@ -18,12 +18,14 @@
 The author first used the FTLE computation in LCS folder, then used the LSTM in CNN folder to 
 learn the results. Here are some rough results:
 
+
 <img src="Figure_1.png" style="float : left; width : 50%">
 <img src="Figure_4.png" style="float : right; width : 50%">
 <img src="Figure_2.png" style="float : left; width : 50%">
 <img src="Figure_5.png" style="float : right; width : 50%">
 <img src="Figure_3.png" style="float : left; width : 50%">
 <img src="Figure_6.png" style="float : right; width : 50%">
+
 The margin of error measured by MSE is about 0.01, which is not bad, Therefore the absolute
 difference between the calculated value to the real value is about 0.1, considering the data range is roughly between +1.2 to -0.5,
 the error is estimated about only 5%-15% for the entire graph. The image is an visualization of the Data, does not demonstrate the real
