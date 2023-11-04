@@ -93,7 +93,7 @@ class ConvNet(nn.Module):
 
             outputs = torch.cat((outputs, self.fc_layers(c_next)[0]))
 
-        outputs = outputs.view(1, 9, 500, 500)
+        outputs = outputs.view(1, self.num_output, 500, 500)
 
         return outputs
 
